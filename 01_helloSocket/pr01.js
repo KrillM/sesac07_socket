@@ -14,14 +14,17 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
     socket.on("hello", (res) => {
         console.log("Client", res);
+        socket.emit("resHello", {msg: "hello: 안녕하세요"});
     })
 
     socket.on("study", (res) => {
         console.log("Client", res);
+        socket.emit("resStudy", {msg: "study: 공부하세요"});
     })
 
     socket.on("bye", (res) => {
         console.log("Client", res);
+        socket.emit("resBye", {msg: "bye: 잘 가세요"});
     })
 })
 

@@ -20,18 +20,27 @@
 
         function hello() {
             socket.emit("hello", "hello");
-            return (msg.innerHTML = "hello: 안녕하세요~")
         }
+
+        socket.on("resHello", (res) => {
+            msg.innerHTML = res.msg;
+        })
 
         function study() {
             socket.emit("study", "study");
-            return (msg.innerHTML = "study: 공부합시다~")
         }
+
+        socket.on("resStudy", (res) => {
+            msg.innerHTML = res.msg;
+        })
 
         function bye() {
             socket.emit("bye", "bye");
-            return (msg.innerHTML = "bye: 잘 가~")
         }
+
+        socket.on("resBye", (res) => {
+            msg.innerHTML = res.msg;
+        })
     </script>
 </body>
 </html>
