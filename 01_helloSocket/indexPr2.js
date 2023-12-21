@@ -16,6 +16,10 @@ const io = require("socket.io")(server, {
 const crewIdarr = {};
 // {"socket.id" : "crewId"}
 
+const updateCrewList = () => {
+    io.emit("crewList", crewIdarr)
+}
+
 io.on("connection", (socket) => {
 
     // 입장할 때 받은 아이디로 입장을 공지한다.
@@ -29,20 +33,30 @@ io.on("connection", (socket) => {
         else {
             io.emit("notice", {msg: `${res.crewId}님이 입장하였습니다.`})
             socket.emit("entrySuccess", {crewId: res.crewId})
-            crewIdarr[socket.id] = res.crewId;
+            crewIdarr[socket.id] = res.crewId;    
+            updateCrewList();
         }
 
-        // io.emit("notice", {msg: `${res.crewId}님이 입장하였습니다.`})    
         console.log(crewIdarr);
+        // io.emit("notice", {msg: `${res.crewId}님이 입장하였습니다.`})    
     })
 
-    socket.on("disconnect", (res) => {
+    socket.on("disconnect", () => {
         io.emit("notice", {msg: `${crewIdarr[socket.id]}님이 나갔습니다.`})
         delete crewIdarr[socket.id];
+        console.log(crewIdarr);
+        updateCrewList();
+    })
+
+    socket.on("sendMsg", (res) => {
+        if(res.dm === 'all') io.emit("chat", { crewId: res.crewId, msg: res.msg })
+        else{
+            io.to(res.dm).emit("chat", { crewId: res.crewId, msg: res.msg, dm: true })
+            socket.emit("chat", { crewId: res.crewId, msg: res.msg, dm: true })
+        }
     })
 })
 
 server.listen(port, () => {
-    console.log("crewIdarr ", crewIdarr);
     console.log(`주소는 localhost:${port} 입니다.`);
 });
