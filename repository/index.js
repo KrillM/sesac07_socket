@@ -23,6 +23,12 @@ io.on("connection", (socket) => {
         crewTable[socket.id] = res.crewName;
         updateTableCrew();
     })
+
+    socket.on("disconnect", () => {
+        io.emit("notice", {message: `${crewTable[socket.id]}님이 나갔습니다.`})
+        delete crewTable[socket.id];
+        updateTableCrew();
+    })
 })
 
 server.listen(port, () => {
