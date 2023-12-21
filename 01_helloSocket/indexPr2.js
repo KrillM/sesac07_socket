@@ -20,8 +20,20 @@ io.on("connection", (socket) => {
 
     // 입장할 때 받은 아이디로 입장을 공지한다.
     socket.on("entry", (res) => {
-        crewIdarr[socket.id] = res.crewId;
-        io.emit("notice", {msg: `${res.crewId}님이 입장하였습니다.`})
+
+        // includes: 문자열이나 배열에서 인자로 넘겨준 값의 존재 여부를 확인
+        // indexOf: 배열에서 인자로 넘겨준 값의 인덱스를 추출, 없다면 -1 반환
+        if(Object.values(crewIdarr).includes(res.crewId)){
+            socket.emit("error", {msg: `이미 사용중인 아이디이므로 입장할 수 없습니다.`})
+        }
+        else {
+            io.emit("notice", {msg: `${res.crewId}님이 입장하였습니다.`})
+            socket.emit("entrySuccess", {crewId: res.crewId})
+            crewIdarr[socket.id] = res.crewId;
+        }
+
+        // io.emit("notice", {msg: `${res.crewId}님이 입장하였습니다.`})    
+        console.log(crewIdarr);
     })
 
     socket.on("disconnect", (res) => {

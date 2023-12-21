@@ -30,6 +30,13 @@ export default function Chat02(){
 
     useEffect(() => {
         // joinTheChat();
+        socket.on("error", (res) => {
+            alert(res.msg);
+        })
+
+        socket.on("entrySuccess", (res) => {
+            setCrewId(res.crewId);
+        })
     }, [])
 
     useEffect(() => {
@@ -47,7 +54,7 @@ export default function Chat02(){
     const joinTheChat = () => {
         initSocketConnect();
         socket.emit("entry", {crewId: newCrewInput});
-        setCrewId(newCrewInput)
+        // setCrewId(newCrewInput)
     }
 
     return(<>
