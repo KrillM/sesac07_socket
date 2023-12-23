@@ -6,15 +6,16 @@ import Notice from "./Notice";
 const socket = io.connect("http://localhost:8000", {autoConnect: false});
 
 export default function TalkTogether () {
-    const [message, setMessage] = useState('');
-    const [chatting, setChatting] = useState([]);
+    const [message, setMessage] = useState(''); // 채팅으로 보낼 메시지
+    const [chatting, setChatting] = useState([]); // 채팅 내용
 
-    const [newCrew, setNewCrew] = useState("");
-    const [crewName, setCrewName] = useState(null);
+    const [newCrew, setNewCrew] = useState(""); // 새 맴버 추가
+    const [crewName, setCrewName] = useState(null); // 맴버의 이름
 
-    const [crewList, setCrewList] = useState({});
-    const [dm2, setDm2] = useState("all");
+    const [crewList, setCrewList] = useState({});   // 맴버의 리스트
+    const [dm2, setDm2] = useState("all");  // 메시지 보내는 기능
 
+    // 소켓 연결
     function initConnectSocket () {
         if(!socket.connected) socket.connect();
     }
