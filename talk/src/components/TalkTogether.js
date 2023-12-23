@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo, useDebugValue } from 'react';
 import io from 'socket.io-client';
 import Chatting from "./Chatting";
 import Notice from "./Notice";
@@ -7,21 +7,13 @@ const socket = io.connect("http://localhost:8000", {autoConnect: false});
 
 export default function TalkTogether () {
     const [message, setMessage] = useState('');
-    const [chatting, setChatting] = useState([
-        {
-            type: "i",
-            talk: 'hello'
-        }, {
-            type: "you",
-            talk: 'hi'
-        }, {
-            type: "notice",
-            talk: '~~~~~~~님이 입장하였습니다.'
-        }, 
-    ]);
+    const [chatting, setChatting] = useState([]);
 
     const [newCrew, setNewCrew] = useState("");
     const [crewName, setCrewName] = useState(null);
+
+    const [crewList, setCrewList] = useState({});
+    const [dm2, setDm2] = useState("all");
 
     function initConnectSocket () {
         if(!socket.connected) socket.connect();
@@ -35,8 +27,35 @@ export default function TalkTogether () {
         socket.on("entried", (res) => {
             setCrewName(res.crewName);
         })
+
+        socket.on("crewList", (res) => {
+            setCrewList(res);
+        })
     }, [])
 
+    const crewListOption = useMemo(() => {
+        const option = []
+        for(const key in crewList){
+            if(crewList[key] === crewName) continue;
+            option.push(<option key={key} value={key}>{crewList[key]}</option>)
+        }
+        return option
+    }, [crewList])
+
+    const addChatting = useCallback((res) => {
+        const type = res.crewName === crewName ? "i" : "you";
+        const talk = `${res.dm ? '(너에게만)' : ''} ${res.crewName}: ${res.message}`
+        const newChatting = [...chatting, {type: type, talk: talk}]
+        setChatting(newChatting);
+    }, [crewName, chatting])
+
+    useEffect(() => {
+        socket.on("chat", addChatting);
+        return () => socket.off("chat", addChatting)
+    },[addChatting])
+
+    socket.on("chat", addChatting)
+ 
     useEffect(() => {
         const notice = (res) => {
             const newChatting = [...chatting, {type: "notice", talk: res.message}]
@@ -47,7 +66,13 @@ export default function TalkTogether () {
         return () => socket.off("notice", notice);
     }, [chatting])
 
-    function sendMessage () {}
+    function sendMessage () {
+        if(message !== ""){
+            socket.emit("sendMessage", {crewName: crewName, message: message, dm: dm2})
+            setMessage("")
+        }
+    }
+
     function joinChattingRoom () {
         initConnectSocket();
         socket.emit("entry", {crewName: newCrew});
@@ -63,6 +88,10 @@ export default function TalkTogether () {
             </div>
 
             <div className="input-container">
+                <select value={dm2} onChange={(e) => setDm2(e.target.value)}>
+                    <option value="all">모두에게</option>
+                    {crewListOption}
+                </select>
                 <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
                 <button onClick={sendMessage}>전송</button>
             </div>

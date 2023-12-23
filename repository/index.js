@@ -35,6 +35,14 @@ io.on("connection", (socket) => {
         delete crewTable[socket.id];
         updateTableCrew();
     })
+
+    socket.on("sendMessage", (res) => {
+        if(res.dm === "all") io.emit("chat", {crewName: res.crewName, message: res.message})
+        else{
+            io.to(res.dm).emit("chat", {crewName: res.crewName, message: res.message, dm: true})
+            socket.emit("chat", {crewName: res.crewName, message: res.message, dm: true})
+        }
+    })
 })
 
 server.listen(port, () => {
