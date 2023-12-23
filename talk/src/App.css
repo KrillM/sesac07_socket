@@ -3,8 +3,8 @@
 }
 
 .chat-container {
-    width: 320px;
-    min-height: 500px;
+    width: 100%;
+    min-height: 600px;
     background-color: olive;
     padding: 10px 15px 0;
 }
@@ -35,13 +35,21 @@
 }
 
 .input-container {
-    width: 320px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
 }
 
 .input-container > input {
     flex-grow: 1;
+}
+
+.btn {
+    white-space: nowrap; 
+}
+
+.nameColour{
+    color: snow;
 }
 
 .chat-container .notice {
