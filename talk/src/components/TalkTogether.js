@@ -1,4 +1,3 @@
-import "./chat.css";
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Chatting from "./Chatting";

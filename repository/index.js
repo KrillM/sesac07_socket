@@ -18,10 +18,16 @@ const io = require("socket.io")(server, {
 
 io.on("connection", (socket) => {
     socket.on("entry", (res) => {
-        io.emit("notice", {message: `${res.crewName}님이 입장하였습니다.`})
-        socket.emit("entried", {crewName: res.crewName})
-        crewTable[socket.id] = res.crewName;
-        updateTableCrew();
+
+        if(Object.values(crewTable).includes(res.crewName)) {
+            socket.emit("error", {message: '이미 사용 중인 닉네임이라 다른 닉네임으로 입장해주시길 바랍니다.'})
+        }
+        else{
+            io.emit("notice", {message: `${res.crewName}님이 입장하였습니다.`})
+            socket.emit("entried", {crewName: res.crewName})
+            crewTable[socket.id] = res.crewName;
+            updateTableCrew();
+        }
     })
 
     socket.on("disconnect", () => {
