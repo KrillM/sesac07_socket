@@ -102,11 +102,14 @@ export default function TalkTogether () {
                 <input type="text" class="form-control" value={message} onChange={(e) => setMessage(e.target.value)} />
                 <button class="btn btn-light" onClick={sendMessage}>전송</button>
             </div>
-        </>) : (<>
-            <div className='input-container'>
-                <input type='text' class="form-control" value={newCrew} onChange={(e) => setNewCrew(e.target.value)}/>
-                <button class="btn btn-light" onClick={joinChattingRoom}>입장</button>
+        </>) : (
+            <div className='helloGuys'>
+                <h1 className='show-Title'> Talk Together </h1>
+                <div className='show-chatting-rooms'>
+                    <input type='text' class="form-control" value={newCrew} onChange={(e) => setNewCrew(e.target.value)}/>
+                    <button class="btn btn-outline-success" onClick={joinChattingRoom}>입장</button>
+                </div>
             </div>
-        </>) }
+        )}
     </>)
 }

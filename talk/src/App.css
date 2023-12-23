@@ -2,9 +2,10 @@
     box-sizing: border-box;
 }
 
+/* 초기 설정 */
 .chat-container {
     width: 100%;
-    min-height: 600px;
+    min-height: 900px; /* 기본 최소 높이 */
     background-color: olive;
     padding: 10px 15px 0;
 }
@@ -58,4 +59,35 @@
     color: white;
     text-align: center;
     margin-top: 6px;
+}
+
+.helloGuys {
+    display: flex;
+    flex-direction: column; /* 자식 요소를 세로로 쌓기 */
+    justify-content: center; /* 세로로 가운데 정렬 */
+    align-items: center; /* 가로로 가운데 정렬 */
+    height: 100vh; /* 세로 중앙 정렬을 위한 높이 설정 (선택 사항) */
+}
+
+.show-Title {
+    /* 이 부분은 .show-Title 클래스에 적용되는데, 이는 부모 역할을 하는 요소가 flex container여야 효과가 있습니다. */
+    display: flex;
+    color: olive;
+    font-family: 'Hahmlet', serif;
+    font-weight: 600;
+    justify-content: center; /* 가로로 가운데 정렬 */
+    align-items: center; /* 세로로 가운데 정렬 */
+    padding-bottom: 20px;
+}
+
+.show-chatting-rooms {
+    width: 600px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* 가로로 가운데 정렬 */
+    margin: 0 auto; /* 왼쪽과 오른쪽 마진을 자동으로 설정하여 전체를 가운데 정렬 */
+}
+
+.show-chatting-rooms > input {
+    flex-grow: 1;
 }
