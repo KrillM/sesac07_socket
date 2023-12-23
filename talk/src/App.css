@@ -5,7 +5,7 @@
 /* 초기 설정 */
 .chat-container {
     width: 100%;
-    min-height: 900px;
+    height: 96vh;
     background-color: olive;
     padding: 10px 15px 0;
 }
