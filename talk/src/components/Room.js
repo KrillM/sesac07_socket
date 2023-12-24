@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import io from 'socket.io-client';
 import Chatting from "./Chatting";
 import Notice from "./Notice";
-import BootStrap from './BootStrap';
 
 const socket = io.connect("http://localhost:8000", {autoConnect: false});
 
@@ -83,34 +82,28 @@ export default function TalkTogether () {
     }
 
     return(<>
-        <BootStrap />
+        <script src="https://cdn.jsdelivr.net/npm/react/umd/react.production.min.js" crossorigin></script>
+        <script src="https://cdn.jsdelivr.net/npm/react-dom/umd/react-dom.production.min.js"crossorigin></script>
+        <script src="https://cdn.jsdelivr.net/npm/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+            integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"/>
 
-        { crewName ? (
-            <div className='olive-room'>
-                <div className='chat-container'>
-                    {chatting.map((chatting, i) => {
-                        if(chatting.type === "notice") return <Notice key={i} chatting={chatting}/>
-                        else return <Chatting key={i} chatting={chatting} />
-                    })}
-                </div>
+        <div className='olive-room'>
+            <div className='chat-container'>
+                {chatting.map((chatting, i) => {
+                    if(chatting.type === "notice") return <Notice key={i} chatting={chatting}/>
+                    else return <Chatting key={i} chatting={chatting} />
+                })}
+            </div>
 
-                <div className="input-container">
-                    <select value={dm2} onChange={(e) => setDm2(e.target.value)}>
-                        <option value="all">모두에게</option>
-                        {crewListOption}
-                    </select>
-                    <input type="text" class="form-control" value={message} onChange={(e) => setMessage(e.target.value)} />
-                    <button class="btn btn-light" onClick={sendMessage}>전송</button>
-                </div>
+            <div className="input-container">
+                <select value={dm2} onChange={(e) => setDm2(e.target.value)}>
+                    <option value="all">모두에게</option>
+                    {crewListOption}
+                </select>
+                <input type="text" class="form-control" value={message} onChange={(e) => setMessage(e.target.value)} />
+                <button class="btn btn-light" onClick={sendMessage}>전송</button>
             </div>
-            ) : (
-            <div className='helloGuys'>
-                <h1 className='show-Title'> Talk Together </h1>
-                <div className='show-chatting-rooms'>
-                    <input type='text' class="form-control" value={newCrew} onChange={(e) => setNewCrew(e.target.value)}/>
-                    <button class="btn btn-outline-success" onClick={joinChattingRoom}>입장</button>
-                </div>
-            </div>
-        )}
+        </div>
     </>)
 }
