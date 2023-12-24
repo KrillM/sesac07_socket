@@ -17,8 +17,12 @@ const io = require("socket.io")(server, {
 })
 
 io.on("connection", (socket) => {
+
+    // 입장할 때 받은 아이디로 입장을 공지한다.
     socket.on("entry", (res) => {
 
+        // includes: 문자열이나 배열에서 인자로 넘겨준 값의 존재 여부를 확인
+        // indexOf: 배열에서 인자로 넘겨준 값의 인덱스를 추출, 없다면 -1 반환
         if(Object.values(crewTable).includes(res.crewName)) {
             socket.emit("error", {message: '이미 사용 중인 닉네임이라 다른 닉네임으로 입장해주시길 바랍니다.'})
         }

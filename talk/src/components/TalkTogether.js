@@ -11,7 +11,6 @@ export default function TalkTogether () {
 
     const [newCrew, setNewCrew] = useState(""); // 새 맴버 추가
     const [crewName, setCrewName] = useState(null); // 맴버의 이름
-
     const [crewList, setCrewList] = useState({});   // 맴버의 리스트
     const [dm2, setDm2] = useState("all");  // 메시지 보내는 기능
 
@@ -34,6 +33,8 @@ export default function TalkTogether () {
         })
     }, [])
 
+    // useMemo: 값을 메모라이징 한다.
+    // 뒤에 있는 의존성 배열에 있는 값이 update 될 때마다 연산을 실행한다.
     const crewListOption = useMemo(() => {
         const option = []
         for(const key in crewList){
@@ -43,6 +44,7 @@ export default function TalkTogether () {
         return option
     }, [crewList])
 
+    // 함수 메모라이징 (useCallback) - 뒤에 있는 의존성 배열에 있는 값이 update 될 때만 함수를 다시 선언한다.
     const addChatting = useCallback((res) => {
         const type = res.crewName === crewName ? "i" : "you";
         const talk = `${res.dm ? '(너에게만)' : ''} ${res.message}`
@@ -76,7 +78,7 @@ export default function TalkTogether () {
 
     function joinChattingRoom () {
         initConnectSocket();
-        socket.emit("entry", {crewName: newCrew});
+        socket.emit("entry", { crewName: newCrew });
     }
 
     return(<>
